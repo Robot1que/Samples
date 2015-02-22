@@ -12,33 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace DataGridStyle
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
 
-            this.ItemsControl.ItemsSource = MainWindow.CountryGroupsGet();
-        }
+            this.ItemsControl.ItemsSource = MainWindow.CountriesGet();
 
-        private static CountryGroup[] CountryGroupsGet()
-        {
-            var query =
-                from country in MainWindow.CountriesGet()
-                group country by country.First() into countryGroup
-                select
-                    new CountryGroup(
-                        countryGroup.Key.ToString(),
-                        countryGroup.Select(item => new CountryItem(item)).ToArray()
-                    );
-
-            return query.ToArray();
+            this.GroupingAdd();
         }
 
         private static string[] CountriesGet()
@@ -138,6 +124,44 @@ namespace DataGridStyle
                     "Vanuatu", // 1
                     "Vietnam" // 1
                 };
+        }
+
+        private void GroupingAdd()
+        {
+            var collectionView = (CollectionView)
+                CollectionViewSource.GetDefaultView(this.ItemsControl.ItemsSource);
+            if (collectionView.CanGroup)
+            {
+                collectionView.GroupDescriptions.Add(
+                    new PropertyGroupDescription("", new CountryToGroupValueConverter())
+                );
+            }
+        }
+    }
+
+    internal class CountryToGroupValueConverter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            object result;
+
+            var stringValue = value as string;
+            if (stringValue != null && stringValue.Length > 0)
+            {
+                result = stringValue[0];
+            }
+            else
+            {
+                result = value;
+            }
+
+            return result;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -19,18 +19,18 @@ namespace DataGridStyle
             var floatingElementHost = (FrameworkElement)values[1];
             var contentPanelHeight = (double)values[2];
             var scrollViewerOffset = (double)values[3];
+            var floatingElementHeight = (double)values[4];
 
             var value = 0d;
 
             if (floatingElementHost.IsLoaded)
             {
-                var transform = floatingElementHost.TransformToAncestor(hostPanel);
-                var point = transform.Transform(new Point(0, 0));
+                var transform = (MatrixTransform)floatingElementHost.TransformToVisual(hostPanel);
 
-                value = -(point.Y - scrollViewerOffset);
+                value = scrollViewerOffset - transform.Matrix.OffsetY;
 
                 var offsetMin = 0d;
-                var offsetMax = contentPanelHeight - floatingElementHost.ActualHeight;
+                var offsetMax = contentPanelHeight - floatingElementHeight;
 
                 value = Math.Max(value, offsetMin);
                 value = Math.Min(value, offsetMax);
