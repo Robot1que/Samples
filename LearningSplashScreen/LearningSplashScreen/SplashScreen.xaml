@@ -1,16 +1,65 @@
-﻿<Window x:Class="LearningSplashScreen.SplashScreen"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:LearningSplashScreen"
-        Title="SplashScreen" Height="300" Width="500" 
-        ResizeMode="NoResize" WindowStyle="None"
-        WindowStartupLocation="CenterScreen" Background="Blue" BorderThickness="5" BorderBrush="AliceBlue">
+﻿<Window 
+    x:Class="LearningSplashScreen.SplashScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:LearningSplashScreen"
+    Title="SplashScreen" Height="300" Width="500" 
+    ResizeMode="NoResize" WindowStyle="None"
+    WindowStartupLocation="CenterScreen" 
+    Background="Blue" 
+    BorderThickness="5" 
+    BorderBrush="AliceBlue"
+>
+    
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                        
+                    <StringAnimationUsingKeyFrames
+                        Storyboard.TargetName="Ellipsis"
+                        Storyboard.TargetProperty="Text"
+                        RepeatBehavior="Forever"
+                    >
+                        <DiscreteStringKeyFrame KeyTime="0:0:0" Value="" />
+                        <DiscreteStringKeyFrame KeyTime="0:0:0.5" Value="." />
+                        <DiscreteStringKeyFrame KeyTime="0:0:1" Value=".." />
+                        <DiscreteStringKeyFrame KeyTime="0:0:1.5" Value="..." />
+                        <DiscreteStringKeyFrame KeyTime="0:0:2" Value="" />
+                    </StringAnimationUsingKeyFrames>
+                        
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    
     <Grid>
-        <Label Margin="19,22,17,80" Name="label1" FontSize="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="MintCream">
-            <Label.BitmapEffect>
-                <OuterGlowBitmapEffect GlowSize="15" />
-            </Label.BitmapEffect> Loading.Please wait..
-        </Label>
-       
+        
+        <Grid.ColumnDefinitions>
+            
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock 
+            Grid.Column="1"
+            FontSize="30" 
+            VerticalAlignment="Center" 
+            Foreground="MintCream"
+            Text="Loading. Please wait"
+        />
+
+        <TextBlock
+            Grid.Column="2"
+            FontSize="30" 
+            HorizontalAlignment="Left" 
+            VerticalAlignment="Center" 
+            Foreground="MintCream"
+            x:Name="Ellipsis"
+        />
+
     </Grid>
+    
 </Window>

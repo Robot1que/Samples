@@ -12,7 +12,7 @@ namespace LearningSplashScreen
 {
     public partial class App : Application
     {
-        private const int SplashScreenMinimumDelayMiliseconds = 1500;
+        private const int SplashScreenMinimumDelayMiliseconds = 3000;
     
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
