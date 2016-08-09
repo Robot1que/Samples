@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Globalization;
 
-namespace DataGridStyle
+namespace DataGridStyle.Converters
 {
     public class VerticalScrollOffsetConverter : IMultiValueConverter
     {

@@ -2,289 +2,53 @@
     x:Class="DataGridStyle.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:local="clr-namespace:DataGridStyle"
+    xmlns:controls="clr-namespace:DataGridStyle.Controls"
     Title="MainWindow" 
     Height="600" 
-    Width="350"
+    Width="450"
     WindowStartupLocation="CenterScreen" 
     ResizeMode="NoResize"
 >
 
     <Window.Resources>
 
-        <local:VerticalScrollOffsetConverter x:Key="VerticalScrollOffsetConverter" />
-        
-        <DataTemplate x:Key="CountryItemTemplate">
-
-            <Border Padding="5">
-
-                <TextBlock 
-                    Text="{Binding Mode=OneTime}"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                />
-
-            </Border>
-
-        </DataTemplate>
-
-        <Style x:Key="CountryGroupItemStyle" TargetType="GroupItem">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="GroupItem">
-                        <StackPanel x:Name="GroupPanel">
-
-                            <ContentPresenter 
-                                Panel.ZIndex="1"
-                                Content="{TemplateBinding Content}" 
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                            >
-                                
-                                <i:Interaction.Behaviors>
-                                    <local:FloatingGroupHeaderBehavior 
-                                        ScrollableElement="{Binding 
-                                            ElementName=ScrollableContent, 
-                                            Mode=OneTime
-                                        }"
-                                        VerticalOffset="{Binding 
-                                            ElementName=Scroller, 
-                                            Path=ContentVerticalOffset,
-                                            Mode=OneWay
-                                        }"
-                                        FloatingElementHostHeight="{Binding
-                                            ElementName=GroupPanel,
-                                            Path=ActualHeight,
-                                            Mode=OneWay
-                                        }"
-                                    />
-                                </i:Interaction.Behaviors>
-
-                            </ContentPresenter>
-
-                            <ItemsPresenter />
-
-                        </StackPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="TabItemHeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="Margin" Value="4" />
         </Style>
-
-        <DataTemplate x:Key="CountryGroupHeaderTemplate">
-
-            <Border
-                Padding="10"
-                Background="#C7D9DD"
-                HorizontalAlignment="Stretch"
-                SnapsToDevicePixels="True"
-            >
-
-                <TextBlock 
-                    Text="{Binding Path=Name, Mode=OneTime}" 
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="20"
-                    FontWeight="Bold"
-                />
-
-            </Border>
-
-        </DataTemplate>
         
-        <ControlTemplate x:Key="ScrollViewerControlTemplate" TargetType="{x:Type ScrollViewer}">
-            
-            <Grid x:Name="Grid" Background="{TemplateBinding Background}">
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <ScrollContentPresenter
-                    x:Name="PART_ScrollContentPresenter"
-                    CanContentScroll="{TemplateBinding CanContentScroll}"
-                    CanHorizontallyScroll="False"
-                    CanVerticallyScroll="False"
-                    Content="{TemplateBinding Content}"
-                    Margin="{TemplateBinding Padding}"
-                >
-
-                    <!--ContentTemplate="{TemplateBinding ContentTemplate}"-->
-
-                    <ScrollContentPresenter.ContentTemplate>
-                        
-                        <DataTemplate>
-                            
-                            <StackPanel>
-                            
-                                <ContentControl 
-                                    Content="{Binding}" 
-                                    Margin="0,60,0,60"
-                                />
-
-                            </StackPanel>
-
-                        </DataTemplate>
-                        
-                    </ScrollContentPresenter.ContentTemplate>
-                    
-                </ScrollContentPresenter>
-
-                <ScrollBar 
-                    x:Name="PART_VerticalScrollBar" 
-                    AutomationProperties.AutomationId="VerticalScrollBar" 
-                    Cursor="Arrow" 
-                    Grid.Column="1" 
-                    Maximum="{TemplateBinding ScrollableHeight}" 
-                    Minimum="0" 
-                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
-                    Value="{Binding
-                        RelativeSource={RelativeSource TemplatedParent},
-                        Path=VerticalOffset, 
-                        Mode=OneWay
-                    }" 
-                    ViewportSize="{TemplateBinding ViewportHeight}"
-                    Margin="0,60,0,60"
-                />
-                
-                <ScrollBar 
-                    x:Name="PART_HorizontalScrollBar" 
-                    AutomationProperties.AutomationId="HorizontalScrollBar" 
-                    Cursor="Arrow" 
-                    Maximum="{TemplateBinding ScrollableWidth}" 
-                    Minimum="0" 
-                    Orientation="Horizontal" 
-                    Grid.Row="1" 
-                    Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" 
-                    Value="{Binding 
-                        RelativeSource={RelativeSource TemplatedParent},
-                        Path=HorizontalOffset, 
-                        Mode=OneWay
-                    }" 
-                    ViewportSize="{TemplateBinding ViewportWidth}"
-                />
-                
-            </Grid>
-            
-        </ControlTemplate>
-
-        <Style x:Key="ScrollViewerStyle" TargetType="ScrollViewer">
-            <!--<Setter Property="Padding" Value="0,60,0,60" />-->
-            <Setter Property="Template" Value="{StaticResource ScrollViewerControlTemplate}" />
-        </Style>
-
-
     </Window.Resources>
 
-    <Grid x:Name="HostPanel">
+    <TabControl TabStripPlacement="Left">
 
-        <ScrollViewer 
-            x:Name="Scroller" 
-            Style="{StaticResource ScrollViewerStyle}"
-            PanningMode="VerticalOnly"
-        >
-            
-            <StackPanel 
-                x:Name="ScrollableContent" 
-                Orientation="Vertical"
-            >
-                
-                <TextBlock 
-                    Text="Content header"
-                    Margin="20"
-                    FontSize="20"
-                    FontWeight="Bold"
-                    Foreground="BurlyWood"
-                    HorizontalAlignment="Center"
-                />
+        <TabItem>
 
-                <ItemsControl 
-                    x:Name="ItemsControl" 
-                    ItemTemplate="{StaticResource CountryItemTemplate}"
-                >
-                    <ItemsControl.GroupStyle>
-                        <GroupStyle 
-                            ContainerStyle="{StaticResource CountryGroupItemStyle}"
-                            HeaderTemplate="{StaticResource CountryGroupHeaderTemplate}"
-                        />
-                    </ItemsControl.GroupStyle>
-                </ItemsControl>
+            <TabItem.Header>
+                <TextBlock Style="{StaticResource TabItemHeaderTextStyle}">
+                    <Run Text="ItemsControl" />
+                    <LineBreak />
+                    <Run Text="with grouping" />
+                </TextBlock>
+            </TabItem.Header>
 
-            </StackPanel>
+            <controls:ItemsControlWithGrouping />
 
-        </ScrollViewer>
+        </TabItem>
 
-        <Grid
-            Height="60"
-            VerticalAlignment="Top"
-        >
-        
-            <Border 
-                Background="White" 
-                Opacity="0.9"
-            />
+        <TabItem>
 
-            <TextBox 
-                VerticalAlignment="Center"
-                HorizontalAlignment="Stretch"
-                Margin="20,0,20,0"
-                Height="26"
-                VerticalContentAlignment="Center"
-            />
+            <TabItem.Header>
+                <TextBlock Style="{StaticResource TabItemHeaderTextStyle}">
+                    <Run Text="ItemsControl" />
+                    <LineBreak />
+                    <Run Text="without grouping" />
+                </TextBlock>
+            </TabItem.Header>
 
-        </Grid>
+            <controls:ItemsControlWithoutGrouping />
 
-        <Grid
-            Height="60"
-            VerticalAlignment="Bottom"
-        >
+        </TabItem>
 
-            <Border
-                Background="White" 
-                Opacity="0.9"
-            />
-
-            <Grid 
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-            >
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                
-                <Button 
-                    Content="Add" 
-                    Margin="10,0,10,0"
-                    Height="26"
-                />
-
-                <Button 
-                    Grid.Column="1"
-                    Content="Remove" 
-                    Margin="10,0,10,0"
-                    Height="26"
-                />
-
-                <Button 
-                    Grid.Column="2"
-                    Content="Cancel" 
-                    Margin="10,0,10,0"
-                    Height="26"
-                />
-
-            </Grid>
-
-        </Grid>
-
-    </Grid>
-
+    </TabControl>
 
 </Window>

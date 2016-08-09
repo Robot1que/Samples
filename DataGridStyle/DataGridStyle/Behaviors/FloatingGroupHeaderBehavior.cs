@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 using System.Windows.Interactivity;
 
-namespace DataGridStyle
+namespace DataGridStyle.Behaviors
 {
     public class FloatingGroupHeaderBehavior : Behavior<ContentPresenter>
     {
