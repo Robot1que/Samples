@@ -35,7 +35,7 @@ namespace DataGridStyle.Controls
         }
     }
 
-    public class GroupItem : IFloatingGroupHeaderTextProvider
+    public class GroupItem : IFloatingGroupHeaderInfo
     {
         public string Title { get; }
 

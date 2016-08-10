@@ -37,7 +37,7 @@ namespace DataGridStyle.Behaviors
         }
     }
 
-    public interface IFloatingGroupHeaderTextProvider
+    public interface IFloatingGroupHeaderInfo
     {
         string HeaderText { get; }
 
@@ -69,39 +69,82 @@ namespace DataGridStyle.Behaviors
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-            
-            var isFirstItem = true;
-            var adornedItems = this.AdornedItemsGet();
-            var headers = adornedItems.Where(item => item.IsHeader);
 
-            foreach(var header in headers)
+            var element = (FrameworkElement)this.AdornedElement;
+            var renderInfos = this.FloatingGroupHeaderRenderInfosGet();
+
+            foreach(var renderInfo in renderInfos)
             {
-                var point = header.Element.TranslatePoint(new Point(0, 0), this.AdornedElement);
-                if (point.Y > 0)
-                {
-                    if (isFirstItem)
-                    {
-                        isFirstItem = false;
+                this.HeaderDraw(
+                    drawingContext,
+                    new Rect(renderInfo.Location, new Size(element.ActualWidth, 54)),
+                    renderInfo.HeaderText
+                );
+            }
+        }
 
-                        var idx = Array.IndexOf(adornedItems, header);
-                        if (idx > 0)
-                        {
-                            this.HeaderDraw(
-                                drawingContext, 
-                                new Rect(
-                                    new Point(0, Math.Min(0, point.Y - header.Element.ActualHeight)), 
-                                    new Size(header.Element.ActualWidth, header.Element.ActualHeight)
-                                ), 
-                                adornedItems[idx - 1].HeaderText
-                            );
-                        }
+        private Point LocationGet(AdornedItem item)
+        {
+            return item.Element.TranslatePoint(new Point(0, 0), this.AdornedElement);
+        }
+
+        private FloatingGroupHeaderRenderInfo[] FloatingGroupHeaderRenderInfosGet()
+        {
+            var renderInfoList = new List<FloatingGroupHeaderRenderInfo>();
+            var panel = (Panel)this.AdornedElement;
+
+            var adornedItems = 
+                panel.Children.Cast<FrameworkElement>()
+                    .Select(item => new AdornedItem(item))
+                    .ToArray();
+
+            var headers = 
+                adornedItems
+                    .Where(item => item.GroupHeaderInfo.IsHeader)
+                    .Select(item => new { Item = item, Location = this.LocationGet(item) })
+                    .Where(item => item.Location.Y >= 0)
+                    .ToArray();
+
+            if (!headers.Any())
+            {
+                renderInfoList.Add(
+                    new FloatingGroupHeaderRenderInfo(
+                        new Point(0, 0), 
+                        adornedItems.Last().GroupHeaderInfo.HeaderText
+                    )
+                );
+            }
+            else
+            {
+                var firstHeader = headers.First();
+
+                if (firstHeader.Location.Y > 0)
+                {
+                    var idx = Array.IndexOf(adornedItems, firstHeader.Item);
+                    if (idx > 0)
+                    {
+                        var adornedItem = adornedItems[idx-1];
+                        renderInfoList.Add(
+                            new FloatingGroupHeaderRenderInfo(
+                                new Point(0, Math.Min(0, firstHeader.Location.Y - 54)),
+                                adornedItem.GroupHeaderInfo.HeaderText
+                            )
+                        );
                     }
-                    
-                    var bounds = 
-                        new Rect(point, new Size(header.Element.ActualWidth, header.Element.ActualHeight));
-                    this.HeaderDraw(drawingContext, bounds, header.HeaderText);
+                }
+
+                foreach (var header in headers)
+                {
+                    renderInfoList.Add(
+                        new FloatingGroupHeaderRenderInfo(
+                            header.Location,
+                            header.Item.GroupHeaderInfo.HeaderText
+                        )
+                    );
                 }
             }
+
+            return renderInfoList.ToArray();
         }
 
         private void HeaderDraw(DrawingContext drawingContext, Rect bounds, string text)
@@ -135,35 +178,36 @@ namespace DataGridStyle.Behaviors
             );
         }
 
-        private AdornedItem[] AdornedItemsGet()
-        {
-            var panel = (Panel)this.AdornedElement;
-            return 
-                panel.Children.Cast<FrameworkElement>()
-                    .Select(item => new AdornedItem(item))
-                    .ToArray();
-        }
-
         private class AdornedItem
         {
-            public FrameworkElement Element { get; }
+            public UIElement Element { get; }
 
-            public bool IsHeader { get; } = false;
-
-            public string HeaderText { get; } = null;
+            public IFloatingGroupHeaderInfo GroupHeaderInfo { get; }
 
             public AdornedItem(FrameworkElement element)
             {
                 this.Element = element;
-
-                var headerProvider = element.DataContext as IFloatingGroupHeaderTextProvider;
-                if (headerProvider != null)
-                {
-                    this.IsHeader = headerProvider.IsHeader;
-                    this.HeaderText = headerProvider.HeaderText;
-                }
+                this.GroupHeaderInfo = element.DataContext as IFloatingGroupHeaderInfo;
             }
         }
 
+    }
+
+    public class FloatingGroupHeaderRenderInfo
+    {
+        public Point Location { get; }
+
+        public string HeaderText { get; }
+
+        public FloatingGroupHeaderRenderInfo(Point location, string headerText)
+        {
+            if (headerText == null)
+            {
+                throw new ArgumentNullException(nameof(headerText));
+            }
+
+            this.Location = location;
+            this.HeaderText = headerText;
+        }
     }
 }
