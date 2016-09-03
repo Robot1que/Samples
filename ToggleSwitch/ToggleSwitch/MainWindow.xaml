@@ -1,0 +1,281 @@
+﻿<Window 
+    x:Class="ToggleSwitch.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:ToggleSwitch"
+    mc:Ignorable="d"
+    Title="MainWindow" 
+    Height="350" 
+    Width="525"
+    Loaded="Window_Loaded"
+    x:Name="RootControl"
+>
+
+    <Window.Resources>
+
+        <ControlTemplate x:Key="SwitchButtonTemplate" TargetType="Button">
+            <Grid>
+
+                <Border
+                    Background="{TemplateBinding Background}"
+                    Opacity="1"
+                />
+
+                <ContentPresenter />
+                
+            </Grid>
+        </ControlTemplate>
+
+        <Storyboard x:Key="SwitchStoryboard" Duration="0:0:1">
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="RenderTransform.X"
+                From="2"
+                To="178"
+                Duration="0:0:1"
+            />
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumbShadow"
+                Storyboard.TargetProperty="RenderTransform.X"
+                From="2"
+                To="172"
+                Duration="0:0:1"
+            />
+
+        </Storyboard>
+
+        <Storyboard 
+            x:Key="SwitchOffStoryboard" 
+            Duration="0:0:0.3"
+            Completed="SwitchOffStoryboard_Completed"
+            FillBehavior="Stop"
+        >
+
+            <BooleanAnimationUsingKeyFrames
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="IsEnabled"
+                Duration="0:0:0.3"
+            >
+                <DiscreteBooleanKeyFrame KeyTime="0%" Value="False" />
+                <DiscreteBooleanKeyFrame KeyTime="100%" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="2"
+                Duration="0:0:0.3"
+            >
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumbShadow"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="2"
+                Duration="0:0:0.3"
+            >
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+
+        </Storyboard>
+
+        <Storyboard 
+            x:Key="SwitchOnStoryboard" 
+            Duration="0:0:0.3"
+            Completed="SwitchOnStoryboard_Completed"
+            FillBehavior="Stop"
+        >
+
+            <BooleanAnimationUsingKeyFrames
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="IsEnabled"
+                Duration="0:0:0.3"
+            >
+                <DiscreteBooleanKeyFrame KeyTime="0%" Value="False" />
+                <DiscreteBooleanKeyFrame KeyTime="100%" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="178"
+                Duration="0:0:0.3"
+            >
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumbShadow"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="172"
+                Duration="0:0:0.3"
+            >
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+
+        </Storyboard>
+
+        <Storyboard 
+            x:Key="SwitchOffFullStoryboard" 
+            Duration="0:0:0.6"
+            Completed="SwitchOffStoryboard_Completed"
+            FillBehavior="Stop"
+        >
+
+            <BooleanAnimationUsingKeyFrames
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="IsEnabled"
+                Duration="0:0:0.6"
+            >
+                <DiscreteBooleanKeyFrame KeyTime="0%" Value="False" />
+                <DiscreteBooleanKeyFrame KeyTime="100%" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="2"
+                Duration="0:0:0.6"
+            >
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumbShadow"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="2"
+                Duration="0:0:0.6"
+            >
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+
+        </Storyboard>
+
+        <Storyboard 
+            x:Key="SwitchOnFullStoryboard" 
+            Duration="0:0:0.6"
+            Completed="SwitchOnStoryboard_Completed"
+            FillBehavior="Stop"
+        >
+
+            <BooleanAnimationUsingKeyFrames
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="IsEnabled"
+                Duration="0:0:0.6"
+            >
+                <DiscreteBooleanKeyFrame KeyTime="0%" Value="False" />
+                <DiscreteBooleanKeyFrame KeyTime="100%" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="178"
+                Duration="0:0:0.6"
+            >
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumbShadow"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="172"
+                Duration="0:0:0.6"
+            >
+                <DoubleAnimation.EasingFunction>
+                    <QuarticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+
+        </Storyboard>
+
+        <Storyboard x:Key="SwitchOnHoldStoryboard">
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumb"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="178"
+                Duration="0"
+            />
+
+            <DoubleAnimation 
+                Storyboard.TargetName="SwitchThumbShadow"
+                Storyboard.TargetProperty="RenderTransform.X"
+                To="172"
+                Duration="0"
+            />
+
+        </Storyboard>
+
+    </Window.Resources>
+
+    <Grid x:Name="RootPanel">
+
+        <Grid
+            VerticalAlignment="Center" 
+            HorizontalAlignment="Center"
+            Width="250"
+            Height="50"
+            Background="#DDDDDD"
+        >
+
+            <Border
+                x:Name="SwitchThumbShadow"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Height="46"
+                Width="76"
+                Background="#22000000"
+            >
+                <Border.RenderTransform>
+                    <TranslateTransform X="2" Y="2" />
+                </Border.RenderTransform>
+            </Border>
+
+            <Border
+                x:Name="SwitchThumb"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Height="42"
+                Width="70"
+                Background="#AAAAAA"
+                MouseLeftButtonDown="SwitchThumb_PreviewMouseLeftButtonDown"
+                MouseMove="SwitchThumb_MouseMove"
+                MouseLeftButtonUp="SwitchThumb_PreviewMouseLeftButtonUp"
+            >
+                <Border.RenderTransform>
+                    <TranslateTransform X="2" Y="4" />
+                </Border.RenderTransform>
+            </Border>
+
+        </Grid>
+
+        <TextBlock 
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Center"
+            Margin="8"
+            Text="{Binding ElementName=RootControl, Path=IsChecked, Mode=OneWay}"
+        />
+
+    </Grid>
+    
+</Window>
