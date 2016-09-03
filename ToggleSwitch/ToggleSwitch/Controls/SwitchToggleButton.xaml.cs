@@ -56,7 +56,7 @@ namespace ToggleSwitch.Controls
                 DependencyProperty.Register(
                     nameof(SwitchToggleButton.IsChecked), 
                     typeof(bool), 
-                    typeof(MainWindow),
+                    typeof(SwitchToggleButton),
                     new PropertyMetadata(false)
                 );
         }

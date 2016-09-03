@@ -4,6 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:behaviors="clr-namespace:ToggleSwitch.Behaviors"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:local="clr-namespace:ToggleSwitch.Controls"
     mc:Ignorable="d" 
     Width="250"
@@ -12,6 +16,14 @@
 >
 
     <UserControl.Resources>
+
+        <SolidColorBrush x:Key="ThumbNormalBrush" Color="#AAAAAA" options:Freeze="True"/>
+        <SolidColorBrush x:Key="ThumbMouseOverBrush" Color="#BABABA" options:Freeze="True"/>
+        <SolidColorBrush x:Key="ThumbPressedBrush" Color="#9A9A9A" options:Freeze="True"/>
+
+        <SolidColorBrush x:Key="RootPanelNormalBrush" Color="#DDDDDD" options:Freeze="True"/>
+        <SolidColorBrush x:Key="RootPanelMouseOverBrush" Color="#E0E0E0" options:Freeze="True"/>
+        <SolidColorBrush x:Key="RootPanelPressedBrush" Color="#C0C0C0" options:Freeze="True"/>
 
         <Storyboard x:Key="SwitchStoryboard" Duration="0:0:1">
 
@@ -213,7 +225,77 @@
 
     </UserControl.Resources>
 
-    <Grid Background="#DDDDDD">
+    <Grid x:Name="RootPanel" Background="#DDDDDD">
+
+        <VisualStateManager.VisualStateGroups>
+
+            <VisualStateGroup Name="CommonStates">
+
+                <VisualState Name="Normal" />
+
+                <VisualState Name="MouseOver">
+                    <Storyboard>
+
+                        <ObjectAnimationUsingKeyFrames
+                            Storyboard.TargetName="RootPanel"
+                            Storyboard.TargetProperty="Background"
+                            Duration="0"
+                        >
+                            <DiscreteObjectKeyFrame 
+                                KeyTime="0" 
+                                Value="{StaticResource RootPanelMouseOverBrush}"
+                            />
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames
+                            Storyboard.TargetName="SwitchThumb"
+                            Storyboard.TargetProperty="Background"
+                            Duration="0"
+                        >
+                            <DiscreteObjectKeyFrame 
+                                KeyTime="0" 
+                                Value="{StaticResource ThumbMouseOverBrush}"
+                            />
+                        </ObjectAnimationUsingKeyFrames>
+
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState Name="Pressed">
+                    <Storyboard>
+
+                        <ObjectAnimationUsingKeyFrames
+                            Storyboard.TargetName="RootPanel"
+                            Storyboard.TargetProperty="Background"
+                            Duration="0"
+                        >
+                            <DiscreteObjectKeyFrame 
+                                KeyTime="0" 
+                                Value="{StaticResource RootPanelPressedBrush}"
+                            />
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames
+                            Storyboard.TargetName="SwitchThumb"
+                            Storyboard.TargetProperty="Background"
+                            Duration="0"
+                        >
+                            <DiscreteObjectKeyFrame 
+                                KeyTime="0" 
+                                Value="{StaticResource ThumbPressedBrush}"
+                            />
+                        </ObjectAnimationUsingKeyFrames>
+
+                    </Storyboard>
+                </VisualState>
+
+            </VisualStateGroup>
+
+        </VisualStateManager.VisualStateGroups>
+
+        <i:Interaction.Behaviors>
+            <behaviors:CommonVisualStateGroupBehavior />
+        </i:Interaction.Behaviors>
 
         <Border
             x:Name="SwitchThumbShadow"
@@ -221,7 +303,8 @@
             VerticalAlignment="Top"
             Height="46"
             Width="76"
-            Background="#22000000"
+            Background="#000000"
+            Opacity="0.4"
         >
             <Border.RenderTransform>
                 <TranslateTransform X="2" Y="2" />
@@ -234,7 +317,7 @@
             VerticalAlignment="Top"
             Height="42"
             Width="70"
-            Background="#AAAAAA"
+            Background="{StaticResource ThumbNormalBrush}"
             MouseLeftButtonDown="SwitchThumb_PreviewMouseLeftButtonDown"
             MouseMove="SwitchThumb_MouseMove"
             MouseLeftButtonUp="SwitchThumb_PreviewMouseLeftButtonUp"
