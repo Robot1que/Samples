@@ -7,12 +7,13 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:behaviors="clr-namespace:ToggleSwitch.Behaviors"
+    xmlns:converters="clr-namespace:ToggleSwitch.Converters"
     xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:local="clr-namespace:ToggleSwitch.Controls"
     mc:Ignorable="d" 
     Width="250"
-    Height="50" 
-    Loaded="SwitchToggleButton_Loaded"
+    Height="50"
+    x:Name="RootElement"
 >
 
     <UserControl.Resources>
@@ -45,12 +46,7 @@
 
         </Storyboard>
 
-        <Storyboard 
-            x:Key="SwitchOffStoryboard" 
-            Duration="0:0:0.3"
-            Completed="SwitchOffStoryboard_Completed"
-            FillBehavior="Stop"
-        >
+        <Storyboard x:Key="SwitchOffStoryboard" Duration="0:0:0.3" FillBehavior="Stop">
 
             <BooleanAnimationUsingKeyFrames
                 Storyboard.TargetName="SwitchThumb"
@@ -85,12 +81,7 @@
 
         </Storyboard>
 
-        <Storyboard 
-            x:Key="SwitchOnStoryboard" 
-            Duration="0:0:0.3"
-            Completed="SwitchOnStoryboard_Completed"
-            FillBehavior="Stop"
-        >
+        <Storyboard x:Key="SwitchOnStoryboard" Duration="0:0:0.3" FillBehavior="Stop">
 
             <BooleanAnimationUsingKeyFrames
                 Storyboard.TargetName="SwitchThumb"
@@ -125,12 +116,7 @@
 
         </Storyboard>
 
-        <Storyboard 
-            x:Key="SwitchOffFullStoryboard" 
-            Duration="0:0:0.6"
-            Completed="SwitchOffStoryboard_Completed"
-            FillBehavior="Stop"
-        >
+        <Storyboard x:Key="SwitchOffFullStoryboard" Duration="0:0:0.6" FillBehavior="Stop">
 
             <BooleanAnimationUsingKeyFrames
                 Storyboard.TargetName="SwitchThumb"
@@ -165,12 +151,7 @@
 
         </Storyboard>
 
-        <Storyboard 
-            x:Key="SwitchOnFullStoryboard" 
-            Duration="0:0:0.6"
-            Completed="SwitchOnStoryboard_Completed"
-            FillBehavior="Stop"
-        >
+        <Storyboard x:Key="SwitchOnFullStoryboard" Duration="0:0:0.6" FillBehavior="Stop">
 
             <BooleanAnimationUsingKeyFrames
                 Storyboard.TargetName="SwitchThumb"
@@ -294,7 +275,22 @@
         </VisualStateManager.VisualStateGroups>
 
         <i:Interaction.Behaviors>
+            
             <behaviors:CommonVisualStateGroupBehavior />
+
+            <behaviors:SwitchToggleThumbBehavior
+                IsChecked="{Binding ElementName=RootElement, Path=IsChecked, Mode=TwoWay}"
+                Thumb="{Binding ElementName=SwitchThumb, Mode=OneTime}"
+                ThumbLaneWidth="176"
+                ThumbDragingThreshold="4"
+                SwitchStoryboard="{StaticResource SwitchStoryboard}"
+                SwitchOnStoryboard="{StaticResource SwitchOnStoryboard}"
+                SwitchOffStoryboard="{StaticResource SwitchOffStoryboard}"
+                SwitchOnFullStoryboard="{StaticResource SwitchOnFullStoryboard}"
+                SwitchOffFullStoryboard="{StaticResource SwitchOffFullStoryboard}"
+                SwitchOnHoldStoryboard="{StaticResource SwitchOnHoldStoryboard}"
+            />
+
         </i:Interaction.Behaviors>
 
         <Border
@@ -318,9 +314,6 @@
             Height="42"
             Width="70"
             Background="{StaticResource ThumbNormalBrush}"
-            MouseLeftButtonDown="SwitchThumb_PreviewMouseLeftButtonDown"
-            MouseMove="SwitchThumb_MouseMove"
-            MouseLeftButtonUp="SwitchThumb_PreviewMouseLeftButtonUp"
         >
             <Border.RenderTransform>
                 <TranslateTransform X="2" Y="4" />

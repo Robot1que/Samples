@@ -79,9 +79,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behaviors\CommonVisualStateGroupBehavior.cs" />
+    <Compile Include="Behaviors\SwitchToggleThumbBehavior.cs" />
     <Compile Include="Controls\SwitchToggleButton.xaml.cs">
       <DependentUpon>SwitchToggleButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\DebugConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
