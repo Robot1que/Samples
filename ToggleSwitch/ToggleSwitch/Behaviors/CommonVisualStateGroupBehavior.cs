@@ -45,13 +45,16 @@ namespace ToggleSwitch.Behaviors
         {
             string stateName;
 
-            if (this._isPressed)
+            if (this._isMouseOver)
             {
-                stateName = CommonVisualStateGroupBehavior.DefaultPressedStateName;
-            }
-            else if (this._isMouseOver)
-            {
-                stateName = CommonVisualStateGroupBehavior.DefaultMouseOverStateName;
+                if (this._isPressed)
+                {
+                    stateName = CommonVisualStateGroupBehavior.DefaultPressedStateName;
+                }
+                else
+                {
+                    stateName = CommonVisualStateGroupBehavior.DefaultMouseOverStateName;
+                }
             }
             else
             {
@@ -63,6 +66,11 @@ namespace ToggleSwitch.Behaviors
 
         private void AssociatedObject_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            if (Mouse.LeftButton == MouseButtonState.Released)
+            {
+                this._isPressed = false;
+            }
+
             this._isMouseOver = true;
             this.VisualStateUpdate();
         }
